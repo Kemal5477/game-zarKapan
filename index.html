@@ -252,6 +252,12 @@ canvas.addEventListener('mousedown', function(e) {
             arkaPlanMuzigi.play();
 
             gameTime = 60 * Math.pow((90/100),(bolumNo-1));
+            nesneler = [] ;
+            aktifMermiler = [] ;
+            bolumNo = 1 ;
+            oyuncuGuncelCan = 10;
+            dusmanGuncelCan = 10;
+            dusmanMaxCan = 10;
             startTimestamp = 0 ;
             lastTimestamp = 0 ;
             oyunDurumu = "OYUN";
