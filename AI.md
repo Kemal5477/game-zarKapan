@@ -1250,3 +1250,5 @@ Ana Menü'ye dönen butonun içine (tıklama olayına) şu satırı ekle:
 Eğer ileride "En Yüksek Skor" (High Score) gibi özellikler eklemek istersen, `bolumNo` üzerinden hesaplama yapmak yerine, oyunun en başında `let skor = 0;` diye bir değişken tanımlayıp, her düşman öldüğünde `skor++` yapmak çok daha esnek bir mimari sağlar.
 
 Bu düzeltmeleri yaptıktan sonra ulaştığın o rekor seviyeyi nihayet ekranda görebilecek misin? Sıradaki adımda "En Yüksek Skor"u tarayıcı hafızasına (LocalStorage) kaydetmeyi deneyelim mi?
+
+---‐-------------------------------------------------------------------------------------
