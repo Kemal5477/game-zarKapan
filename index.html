@@ -3,7 +3,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            /*ekranın her yerini kullanabilmek için boşlukları sıfırla */
+            /* Hünkarım, ekranın her yerini kullanabilmek için boşlukları sıfırladık */
             body {
                 margin: 0;
                 overflow: hidden;
@@ -19,13 +19,12 @@
 <html>
 <body>
     <canvas id="oyunAlani" style="border:2px solid #000; background-color: #f0f0f0;"></canvas>
-
     <script>
 
         const canvas = document.getElementById('oyunAlani');
         const ctx = canvas.getContext('2d');
 
-      
+        //EKRAN AYARLARI
         function ekranAyari() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -47,14 +46,16 @@
         let fareBasili = false ;
         let fareKonum = { x: 0, y: 0 } ;
 
-        let geciciYazilar = [];
+        let geciciYazilar = []; // Uçuşan metinler burada saklanacak hünkarım
 
         // Nesne özellikleri
       function yeniNesneUret() {
         let ozellikler=["Ateş","Su","Gürz","Can","Süre"];
         let rastgele=Math.floor(Math.random()*5);
     return {
+        // x aralığı: 600 + (0 ile 250 arası) = 600-850 arası
         x: Math.floor(Math.random() *550 + 450),
+        // y aralığı: 450 + (0 ile 50 arası) = 450-500 arası
         y: Math.floor(Math.random() * 240 + 360),
         ozellik:ozellikler[rastgele],
         genislik: 50,
@@ -84,7 +85,7 @@ function nesneBittiMi(){
 
 // Bu fonksiyonu her çağırdığınızda ekrana bir tane daha nesne eklenir
 function nesneEkle() {
-    let denemeLimit = 100; // Sonsuz döngüye girmemek için
+    let denemeLimit = 100; // Sonsuz döngüye girmemek için emniyet kilidi
     let yeni;
     let cakismaVar;
 
@@ -202,11 +203,11 @@ function carpismaVarMi(n1, n2) {
 
 
         let mermi = {
-    x: 550,        
-    y: 241,        
-    hiz: 4,         
-    genislik: 50,   
-    yukseklik: 42,  
+    x: 550,         // Başlangıç X (Büyücünün yanı)
+    y: 241,         // Başlangıç Y
+    hiz: 4,         // Sağa doğru kaç piksel kaysın?
+    genislik: 50,   // Görselin canvas'taki genişliği
+    yukseklik: 42,  // Görselin canvas'taki yüksekliği
     ateslendiMi: false,
     hangiMermi: undefined
     
@@ -217,7 +218,7 @@ let aktifMermiler = [];
 let nesnelerr = new Array("Ateş","Su","Gürz","Can","Süre");
 let secim ;
 
-canvas.addEventListener('contextmenu', function(ee) { //sağ tık
+canvas.addEventListener('contextmenu', function(ee) { //Sağ tık dinleyen eleman burda
     ee.preventDefault() ;
     const rect = canvas.getBoundingClientRect();
     const mouseX = ee.clientX - rect.left;
@@ -235,9 +236,10 @@ canvas.addEventListener('contextmenu', function(ee) { //sağ tık
     }
 })
 
-canvas.addEventListener('mousedown', function(e) {// sol tık
+canvas.addEventListener('mousedown', function(e) {
 
         if (e.button !== 0) return;
+         // 1. Fare koordinatlarını canvas'a göre hesapla
            const rect = canvas.getBoundingClientRect();
            const mouseX = e.clientX - rect.left;
            const mouseY = e.clientY - rect.top;
@@ -249,7 +251,7 @@ canvas.addEventListener('mousedown', function(e) {// sol tık
             arkaPlanMuzigi.volume=0.1;
             arkaPlanMuzigi.play();
 
-            gameTime = 60 * Math.pow((85/100),(bolumNo-1));
+            gameTime = 60 * Math.pow((90/100),(bolumNo-1));
             startTimestamp = 0 ;
             lastTimestamp = 0 ;
             oyunDurumu = "OYUN";
@@ -292,32 +294,44 @@ canvas.addEventListener('mousedown', function(e) {// sol tık
         else if (oyunDurumu === "OYUN") {
             // SAĞ ÜST MENÜ BUTONU TIKLAMA KONTROLÜ
             if (mouseX > canvas.width - 120 && mouseX < canvas.width - 20 &&
-                mouseY > 20 && mouseY < 60) {
-                oyunDurumu = "MENU";
-                arkaPlanMuzigi.pause();
-                arkaPlanMuzigi.currentTime = 0;
-                // Oyun verilerini sıfırla
-                nesneler = [];
-                aktifMermiler = [];
-                megaMermiler = [];
-                saldırıAnimasyonuAktif = false;
-                megaSaldırıAnimasyonu = false;
-                return; // Diğer tıklamaları engelle
+            mouseY > 20 && mouseY < 60) {
+
+            oyunDurumu = "MENU";
+            bolumNo = 1; 
+
+            oyuncuGuncelCan = oyuncuMaxCan;
+            dusmanGuncelCan = 10; // Level 1 canı
+            dusmanMaxCan = 10;
+
+            nesneler = [];
+            aktifMermiler = [];
+            megaMermiler = [];
+            geciciYazilar = [];
+
+            saldırıAnimasyonuAktif = false;
+            megaSaldırıAnimasyonu = false;
+            mermi.ateslendiMi = false;
+            
+            arkaPlanMuzigi.pause();
+            arkaPlanMuzigi.currentTime = 0;
+
+            return; // Diğer tıklama kontrollerine girmemesi için
             }
 
         nesneler.forEach((nesne, i)  => {
         if ((mouseX > nesne.x && mouseX < nesne.x + nesne.genislik) && (mouseY > nesne.y && mouseY < nesne.y + nesne.yukseklik)) {
         if (nesne.ozellik === "Ateş" || nesne.ozellik === "Su") {
+        // Her tıklamada yeni bir mermi objesi oluşturup diziye ekliyoruz
         aktifMermiler.push({
         x: 550,
         y: 241,
         hiz: 6,
         genislik: 50,
         yukseklik: 42,
-        tip: nesne.ozellik
+        tip: nesne.ozellik // Hangi görselin çizileceğini burada tutuyoruz
     });
 
-    // Büyücü animasyonunu da başlatalım
+    // Büyücü animasyonunu da başlatalım hünkarım
     saldırıAnimasyonuAktif = true;
     mevcutKareIndeksi = 0;
     // Nesneyi de siliyoruz
@@ -340,15 +354,15 @@ else if(nesne.ozellik==="Gürz"){
     bombaSesi.currentTime=0;
     bombaSesi.play();
     
-    // Mega Knight animasyonunu başlatıyoruz 
+    // Mega Knight animasyonunu başlatıyoruz hünkarım
     megaSaldırıAnimasyonu = true;
     megaKareIndeksi = 0;
     
     // Mega Knight'ın gürzünü oluşturup büyücüye doğru fırlatıyoruz
     megaMermiler.push({
-        x: gucSecimi.x + 500,
+        x: gucSecimi.x + 500, // Mega Knight'ın konumu
         y: gucSecimi.y - 100,
-        hiz: -7, //
+        hiz: -7, // Sola, büyücüye doğru
         genislik: 40,
         yukseklik: 40
     });
@@ -370,7 +384,7 @@ else if(nesne.ozellik === "Süre") {
 
     gameTime += artMiktar;
 
-    // Yazıyı listeye ekliyoruz
+    // Yazıyı listeye ekliyoruz hünkarım
     geciciYazilar.push({
         metin: "+" + artMiktar,
         x: canvas.width / 2,
@@ -386,7 +400,7 @@ else if(nesne.ozellik === "Süre") {
 else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){   
     canSesi.currentTime=0;
     canSesi.play();
-    oyuncuGuncelCan += 1 ;
+    oyuncuGuncelCan += 2 ;
     nesneler.splice(i,1) ;
     nesneBittiMi();
 }
@@ -398,7 +412,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
             if (mouseX > canvas.width / 2 - 100 && mouseX < canvas.width / 2 + 100 &&
             mouseY > 300 && mouseY < 360) {
             oyunDurumu = "OYUN";
-            gameTime = 60 * Math.pow((85/100),(bolumNo-1)) ;
+            gameTime = 60 * Math.pow((90/100),(bolumNo-1)) ;
             lastTimestamp = 0 ;
             startTimestamp = 0 ;
              for(let i=0; i<10; i++) {
@@ -412,7 +426,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
             mouseY > 300 && mouseY < 360) {
             bolumNo = 1 ;
             oyunDurumu = "MENU";
-            gameTime = 60 * Math.pow((85/100),(bolumNo-1)) ;
+            gameTime = 60 * Math.pow((90/100),(bolumNo-1)) ;
             lastTimestamp = 0 ;
             startTimestamp = 0 ;
             }
@@ -474,6 +488,13 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
              ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
              ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+             //Tam Pencere Yazısı
+             ctx.fillStyle = "white";
+             ctx.font = "15px Sans";
+             ctx.textAlign = "center";
+             ctx.fillText("Oyuna başlamadan önce sekmeyi tam pencere veya tam ekran moduna alınız.", canvas.width / 2, 100);
+
+
             // Başlık
              ctx.fillStyle = "white";
              ctx.font = "60px Sans";
@@ -531,12 +552,12 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
             ctx.fill();
 
             // Buton Yazısı
-             ctx.fillStyle = "green";
+             ctx.fillStyle = "black";
              ctx.font = "20px Arial";
              ctx.textAlign = "center";
              ctx.fillText("Ses Seviyesi", canvas.width / 2, 380);
 
-             ctx.font = "20px Arial bold";
+             ctx.font = "20px Arial";
              ctx.fillText("%" + Math.round(genelSesSeviyesi * 100), canvas.width / 2, 422);
 
              //Geri dönme butonu
@@ -564,9 +585,9 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
     // Ana Panel
     ctx.strokeStyle = "#E25822";
     ctx.lineWidth = 5;
-    ctx.strokeRect(200, 50, canvas.width - 400, canvas.height - 100);
+    ctx.strokeRect(200, 50, canvas.width - 400, 580);
     ctx.fillStyle = "rgba(30, 30, 30, 0.9)";
-    ctx.fillRect(200, 50, canvas.width - 400, canvas.height - 100);
+    ctx.fillRect(200, 50, canvas.width - 400, 580);
 
     // Başlık
     ctx.fillStyle = "#E25822";
@@ -588,7 +609,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         { metin: "SAĞ TIK: Hareket eden kutunun özelliğini rastgele değiştirin.", renk: "#00C9FF" },
         { metin: "ATEŞ & SU: Düşmana saldırır. Ateş daha çok hasar verir.", renk: "#FF4500" },
         { metin: "GÜRZ: Mega Knight size gürz fırlatır! Dikkat edin.", renk: "#C4A484" },
-        { metin: "CAN: Eğer canınız azsa size +1 can verir.", renk: "#FF0000" },
+        { metin: "CAN: Eğer canınız azsa size +2 can verir.", renk: "#FF0000" },
         { metin: "SÜRE: Süren azaldıysa bu özelliği seçerek %50 ihtimalle +3, %30 ihtimalle +5, %20 ihtimalle +10 saniye kazanabilirsin.",renk:"aqua"}
     ];
 
@@ -608,18 +629,19 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
     ctx.font = "italic 18px Arial";
     ctx.fillStyle = "#aaa";
     ctx.textAlign = "center";
-    ctx.fillText("Unutmayın , süre bitmeden düşmanı alt etmelisiniz!", canvas.width / 2, canvas.height - 120);
+    ctx.fillText("Unutmayın , süre bitmeden düşmanı alt etmelisiniz!", canvas.width / 2, 550);
 
     // Geri Dön Butonu
     ctx.fillStyle = "#E25822";
     ctx.beginPath();
-    ctx.roundRect(Math.round(canvas.width / 2 - 100), Math.round(canvas.height - 100), 200, 50, 8);
+    ctx.roundRect(Math.round(canvas.width / 2 - 100), 580, 200, 50, 8);
+    butonAyarla(Math.round(canvas.width / 2 - 100), 580, 200, 50);
     ctx.fill();
 
     ctx.fillStyle = "white";
     ctx.font = "bold 20px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("ANLAŞILDI", canvas.width / 2, canvas.height - 68);
+    ctx.fillText("ANLAŞILDI", canvas.width / 2, 613);
 }
 
             
@@ -780,6 +802,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         }
 
         // --- MERMİYİ FIRLATMA ANI ---
+        // Diyelim ki 3. karede (index 2) büyücü elini ileri uzatıyor:
         if (mevcutKareIndeksi === 2 && !mermi.ateslendiMi) {
             mermi.ateslendiMi = true;
         }
@@ -823,7 +846,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         if (gm.x < bX + 160 && gm.x + gm.genislik > bX &&
             gm.y < bY + 204 && gm.y + gm.yukseklik > bY) {
             bombaSesi2.play() ;
-            oyuncuGuncelCan -= 3; //
+            oyuncuGuncelCan -= 4; // Hasarı burada uyguluyoruz hünkarım
             megaMermiler.splice(gIndex, 1); // Çarpınca kaybolur
         }
 
@@ -832,7 +855,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
     });
 
     aktifMermiler.forEach((m, indeks) => {
-        m.x += m.hiz * (delta / 6.94); 
+        m.x += m.hiz * (delta / 6.94); // Her mermi kendi hızıyla gider
 
         // Tipine göre doğru görseli seçelim
         let gorsel = alev;
@@ -854,7 +877,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         }
 
 
-            // Çarpışan mermiyi diziden siliyoruz
+            // Çarpışan mermiyi diziden siliyoruz hünkarım
             aktifMermiler.splice(indeks, 1);
             nesneBittiMi();
         }
