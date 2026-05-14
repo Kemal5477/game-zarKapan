@@ -2,7 +2,7 @@
 
 ## Oyun Amacı
 
-Oyunun amacı; bulunduğunuz bölüme göre hızı ve türleri değişen güçleri stratejik şekilde seçerek, her bölümde %15 oranında azalan süre içerisinde ve canınız tükenmeden MEGAKNIGHT düşmanını yenmektir.
+Oyunun amacı; bulunduğunuz bölüme göre hızı ve türleri değişen güçleri stratejik şekilde seçerek, her bölümde %10 oranında azalan süre içerisinde ve canınız tükenmeden MEGAKNIGHT düşmanını yenmektir.
 
 ---
 
