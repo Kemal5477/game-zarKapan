@@ -1,4 +1,4 @@
-# Zar Kapan
+t# Zar Kapan
 
 ## Oyun Amacı
 
