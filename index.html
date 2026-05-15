@@ -3,7 +3,7 @@
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-            /* Hünkarım, ekranın her yerini kullanabilmek için boşlukları sıfırladık */
+            /*ekranın her yerini kullanabilmek için boşlukları sıfırladık */
             body {
                 margin: 0;
                 overflow: hidden;
@@ -46,7 +46,7 @@
         let fareBasili = false ;
         let fareKonum = { x: 0, y: 0 } ;
 
-        let geciciYazilar = []; // Uçuşan metinler burada saklanacak hünkarım
+        let geciciYazilar = []; // Uçuşan metinler burada saklanacak
 
         // Nesne özellikleri
       function yeniNesneUret() {
@@ -203,7 +203,7 @@ function carpismaVarMi(n1, n2) {
 
 
         let mermi = {
-    x: 550,         // Başlangıç X (Büyücünün yanı)
+    x: 550,         // Başlangıç X
     y: 241,         // Başlangıç Y
     hiz: 4,         // Sağa doğru kaç piksel kaysın?
     genislik: 50,   // Görselin canvas'taki genişliği
@@ -218,7 +218,7 @@ let aktifMermiler = [];
 let nesnelerr = new Array("Ateş","Su","Gürz","Can","Süre");
 let secim ;
 
-canvas.addEventListener('contextmenu', function(ee) { //Sağ tık dinleyen eleman burda
+canvas.addEventListener('contextmenu', function(ee) { //Sağ tık dinle
     ee.preventDefault() ;
     const rect = canvas.getBoundingClientRect();
     const mouseX = ee.clientX - rect.left;
@@ -236,10 +236,10 @@ canvas.addEventListener('contextmenu', function(ee) { //Sağ tık dinleyen elema
     }
 })
 
-canvas.addEventListener('mousedown', function(e) {
+canvas.addEventListener('mousedown', function(e) {//sol tık dinle
 
         if (e.button !== 0) return;
-         // 1. Fare koordinatlarını canvas'a göre hesapla
+        
            const rect = canvas.getBoundingClientRect();
            const mouseX = e.clientX - rect.left;
            const mouseY = e.clientY - rect.top;
@@ -321,7 +321,7 @@ canvas.addEventListener('mousedown', function(e) {
             arkaPlanMuzigi.pause();
             arkaPlanMuzigi.currentTime = 0;
 
-            return; // Diğer tıklama kontrollerine girmemesi için
+            return;
             }
 
         nesneler.forEach((nesne, i)  => {
@@ -334,10 +334,10 @@ canvas.addEventListener('mousedown', function(e) {
         hiz: 6,
         genislik: 50,
         yukseklik: 42,
-        tip: nesne.ozellik // Hangi görselin çizileceğini burada tutuyoruz
+        tip: nesne.ozellik
     });
 
-    // Büyücü animasyonunu da başlatalım hünkarım
+    // Büyücü animasyonunu da başlatalım
     saldırıAnimasyonuAktif = true;
     mevcutKareIndeksi = 0;
     // Nesneyi de siliyoruz
@@ -360,7 +360,7 @@ else if(nesne.ozellik==="Gürz"){
     bombaSesi.currentTime=0;
     bombaSesi.play();
     
-    // Mega Knight animasyonunu başlatıyoruz hünkarım
+    // Mega Knight animasyonunu başlatıyoruz
     megaSaldırıAnimasyonu = true;
     megaKareIndeksi = 0;
     
@@ -750,7 +750,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
                 ctx.textAlign = "center";
                 ctx.fillText(Math.ceil(gameTime), canvas.width / 2, 50);
 
-                // Geçici yazıları çizdirme ve güncelleme hünkarım
+                // Geçici yazıları çizdirme ve güncelleme
                 geciciYazilar.forEach((yazi, index) => {
                 ctx.save(); // Mevcut ayarları kaydet
                 ctx.globalAlpha = yazi.opasite;
@@ -807,13 +807,12 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
             kareSayacı = 0;
         }
 
-        // --- MERMİYİ FIRLATMA ANI ---
-        // Diyelim ki 3. karede (index 2) büyücü elini ileri uzatıyor:
+        //  MERMİYİ FIRLATMA ANI
         if (mevcutKareIndeksi === 2 && !mermi.ateslendiMi) {
             mermi.ateslendiMi = true;
         }
 
-        // Animasyon bittiğinde (Tüm kareler dönünce):
+        // Animasyon bittiğinde
         if (mevcutKareIndeksi >= buyucuSaldırıKareleri.length) {
             saldırıAnimasyonuAktif = false;
             mevcutKareIndeksi = 0;
@@ -852,7 +851,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         if (gm.x < bX + 160 && gm.x + gm.genislik > bX &&
             gm.y < bY + 204 && gm.y + gm.yukseklik > bY) {
             bombaSesi2.play() ;
-            oyuncuGuncelCan -= 4; // Hasarı burada uyguluyoruz hünkarım
+            oyuncuGuncelCan -= 4;
             megaMermiler.splice(gIndex, 1); // Çarpınca kaybolur
         }
 
@@ -883,7 +882,7 @@ else if(nesne.ozellik==="Can" && oyuncuGuncelCan < oyuncuMaxCan){
         }
 
 
-            // Çarpışan mermiyi diziden siliyoruz hünkarım
+            // Çarpışan mermiyi diziden siliyoruz
             aktifMermiler.splice(indeks, 1);
             nesneBittiMi();
         }
@@ -958,11 +957,11 @@ if (n1.y < gucSecimi.y) {
         let dx = (n1.x + n1.genislik / 2) - (n2.x + n2.genislik / 2);
         let dy = (n1.y + n1.yukseklik / 2) - (n2.y + n2.yukseklik / 2);
 
-        // Toplam genişlik ve yüksekliğin yarısı (çakışma sınırı)
+        // Toplam genişlik ve yüksekliğin yarısı
         let genislikToplam = (n1.genislik + n2.genislik) / 2;
         let yukseklikToplam = (n1.yukseklik + n2.yukseklik) / 2;
 
-        // Ekselerdeki çakışma (overlap) miktarı
+        // Ekselerdeki çakışma miktarı
         let ox = genislikToplam - Math.abs(dx);
         let oy = yukseklikToplam - Math.abs(dy);
 
